@@ -1,478 +1,603 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       width: 1080px;
       height: 1350px;
       font-family: 'Inter', sans-serif;
-      background: #070809;
+      background: #050608;
       position: relative;
       overflow: hidden;
     }
 
-    /* ── TRUCK: right side, full height ── */
-    .truck-wrap {
-      position: absolute;
-      top: 0;
-      right: -80px;
-      width: 820px;
-      height: 980px;
-    }
-    .truck-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 30% 10%;
-      filter: contrast(1.1) saturate(1.15) brightness(0.78);
-    }
-
-    /* Truck reflection */
-    .truck-reflect {
-      position: absolute;
-      top: 820px;
-      right: -80px;
-      width: 820px;
-      height: 180px;
-    }
-    .truck-reflect img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 30% bottom;
-      transform: scaleY(-1);
-      filter: brightness(0.25) blur(3px) saturate(0.8);
-      opacity: 0.5;
-    }
-    .truck-reflect-fade {
+    /* ── FULL-BLEED TRUCK BACKGROUND ── */
+    .bg {
       position: absolute;
       inset: 0;
-      background: linear-gradient(0deg, #070809 0%, transparent 100%);
+      width: 100%;
+      height: 100%;
+      background: url('/truck.jpg') center/cover no-repeat;
+      background-position: 65% 50%;
+      filter: contrast(1.15) saturate(1.2) brightness(0.85);
     }
 
-    /* ── OVERLAYS ── */
-    /* Left content area gradient */
+    /* Left-side gradient so headline reads clearly */
     .ov-left {
       position: absolute;
-      top: 0; left: 0;
-      width: 620px;
-      height: 1000px;
+      inset: 0;
       background: linear-gradient(90deg,
-        #070809 0%,
-        #070809 38%,
-        rgba(7,8,9,0.92) 55%,
-        rgba(7,8,9,0.55) 74%,
-        transparent 100%
-      );
+          rgba(4, 5, 8, 0.95) 0%,
+          rgba(4, 5, 8, 0.82) 30%,
+          rgba(4, 5, 8, 0.45) 55%,
+          rgba(4, 5, 8, 0.05) 80%,
+          rgba(4, 5, 8, 0) 100%);
     }
 
-    /* Top dark fade */
-    .ov-top {
+    /* Top + bottom vignette */
+    .ov-tb {
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 140px;
-      background: linear-gradient(180deg, rgba(5,6,10,0.72) 0%, transparent 100%);
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(4, 5, 8, 0.75) 0%, transparent 18%),
+        linear-gradient(0deg, rgba(4, 5, 8, 0.92) 0%, rgba(4, 5, 8, 0.4) 22%, transparent 38%);
     }
 
-    /* Bottom dark panel */
-    .ov-bottom-panel {
+    /* Subtle red accent glow on left edge */
+    .ov-glow {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 420px;
-      background: #04050a;
+      left: -120px;
+      top: 30%;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(220, 20, 20, 0.22), transparent 70%);
+      filter: blur(20px);
     }
 
-    /* Transition from truck to panel */
-    .ov-transition {
-      position: absolute;
-      top: 840px; left: 0; right: 0;
-      height: 200px;
-      background: linear-gradient(0deg, #04050a 0%, transparent 100%);
-    }
-
-    /* ── BRAND MARK ── */
+    /* ── BRAND MARK (top-left) ── */
     .brand {
       position: absolute;
-      top: 36px; left: 44px;
+      top: 38px;
+      left: 44px;
       z-index: 30;
       display: flex;
       align-items: center;
-      gap: 13px;
-    }
-    .brand-ring {
-      width: 52px; height: 52px;
-      border-radius: 50%;
-      border: 2.5px solid #d41414;
-      background: rgba(180,15,15,0.14);
-      box-shadow: 0 0 22px rgba(200,15,15,0.45);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .brand-ring span {
-      font-family: 'Oswald', sans-serif;
-      font-size: 17px; font-weight: 700;
-      color: #ff2525;
-      letter-spacing: 0.05em;
-    }
-    .brand-text .bname {
-      font-size: 14px; font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-    }
-    .brand-text .bsub {
-      font-size: 9px; color: rgba(255,255,255,0.38);
-      letter-spacing: 0.2em; text-transform: uppercase;
-      margin-top: 3px;
+      gap: 14px;
     }
 
-    /* ── OFFER BADGE (top right) ── */
-    .offer {
-      position: absolute;
-      top: 28px; right: 36px;
-      z-index: 30;
-      text-align: center;
-      background: rgba(4,5,10,0.88);
-      border: 1.5px solid rgba(215,20,20,0.65);
-      border-radius: 6px;
-      padding: 14px 22px 13px;
-      min-width: 190px;
-      box-shadow: 0 0 35px rgba(200,12,12,0.32), inset 0 1px 0 rgba(255,70,70,0.1);
+    .brand-ring {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2.5px solid #e01818;
+      background: rgba(180, 15, 15, 0.18);
+      box-shadow: 0 0 28px rgba(220, 18, 18, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .offer-star {
-      color: #dd1515;
-      font-size: 13px;
-      letter-spacing: 8px;
-      margin-bottom: 2px;
-    }
-    .offer-pct {
+
+    .brand-ring span {
       font-family: 'Oswald', sans-serif;
-      font-size: 72px; font-weight: 700;
-      line-height: 1;
-      color: #ff1e1e;
-      text-shadow: 0 0 35px rgba(255,20,20,0.55);
+      font-size: 19px;
+      font-weight: 700;
+      color: #ff2828;
+      letter-spacing: 0.04em;
     }
-    .offer-off {
+
+    .brand-text .bname {
       font-family: 'Oswald', sans-serif;
-      font-size: 32px; font-weight: 700;
+      font-size: 18px;
+      font-weight: 700;
       color: #fff;
-      letter-spacing: 0.22em;
-      margin-top: -6px;
-    }
-    .offer-line1 {
-      font-size: 11.5px; font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.13em;
       text-transform: uppercase;
-      margin-top: 6px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
     }
-    .offer-line2 {
-      font-size: 8px;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.1em;
+
+    .brand-text .bsub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       margin-top: 4px;
     }
 
-    /* ── HEADLINE ── */
-    .headline {
+    /* ── OFFER BADGE (top-right) ── */
+    .offer {
       position: absolute;
-      top: 155px; left: 44px;
-      z-index: 20;
-    }
-    .hl1 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 128px; font-weight: 700;
-      color: #fff;
-      line-height: 0.88;
-      letter-spacing: 0.01em;
-      text-shadow: 3px 3px 0 rgba(0,0,0,0.6), 0 4px 24px rgba(0,0,0,0.8);
-    }
-    .hl2 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 128px; font-weight: 700;
-      color: #e01414;
-      line-height: 0.88;
-      letter-spacing: 0.01em;
-      text-shadow: 0 0 50px rgba(220,15,15,0.7), 3px 3px 0 rgba(80,0,0,0.5);
-    }
-    .hl3 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 90px; font-weight: 700;
-      color: #fff;
-      line-height: 0.92;
-      letter-spacing: 0.04em;
-      text-shadow: 3px 3px 0 rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
-    }
-    .hl-badge {
-      display: flex; align-items: center; gap: 8px;
-      margin-top: 14px;
-    }
-    .hl-badge-star { color: #cc1515; font-size: 12px; }
-    .hl-badge-text {
-      font-family: 'Oswald', sans-serif;
-      font-size: 18px; font-weight: 500;
-      color: #bbb;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-
-    /* ── SEPARATOR ── */
-    .sep {
-      position: absolute;
-      top: 568px; left: 44px;
-      width: 290px; height: 2px;
-      background: linear-gradient(90deg, #cc1111 0%, rgba(180,15,15,0.08) 100%);
-      z-index: 20;
-    }
-
-    /* ── TAGLINE ── */
-    .tagline {
-      position: absolute;
-      top: 588px; left: 44px;
-      z-index: 20;
-    }
-    .tg-sm {
-      font-size: 12.5px; font-weight: 700;
-      color: rgba(255,255,255,0.7);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      line-height: 1.5;
-    }
-    .tg-lg-red {
-      font-family: 'Oswald', sans-serif;
-      font-size: 48px; font-weight: 700;
-      color: #e01414;
-      letter-spacing: 0.02em; line-height: 1;
-      text-shadow: 0 0 30px rgba(220,15,15,0.5);
-    }
-    .tg-lg-wht {
-      font-family: 'Oswald', sans-serif;
-      font-size: 40px; font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.03em; line-height: 1;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
-    }
-    .tg-desc {
-      font-size: 11px;
-      color: rgba(255,255,255,0.38);
-      line-height: 1.65;
-      max-width: 310px;
-      margin-top: 10px;
-    }
-
-    /* ── SERVICES HEADER ── */
-    .svc-header {
-      position: absolute;
-      top: 940px; left: 0;
+      top: 36px;
+      right: 40px;
       z-index: 30;
-      display: flex; align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #d61515, #8a0a0a);
+      border: 1.5px solid rgba(255, 90, 90, 0.55);
+      border-radius: 8px;
+      padding: 18px 26px 16px;
+      min-width: 175px;
+      box-shadow: 0 0 40px rgba(220, 18, 18, 0.5), inset 0 1px 0 rgba(255, 120, 120, 0.25);
+      transform: rotate(-2deg);
     }
-    .svc-label {
-      background: linear-gradient(90deg, #c41010, #991010);
-      padding: 9px 44px 9px 44px;
+
+    .offer-pct {
       font-family: 'Oswald', sans-serif;
-      font-size: 18px; font-weight: 700;
+      font-size: 78px;
+      font-weight: 700;
+      line-height: 0.85;
       color: #fff;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
-    }
-    .svc-line {
-      flex: 1; height: 2px;
-      background: linear-gradient(90deg, rgba(180,12,12,0.55), transparent);
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
 
-    /* ── SERVICES GRID ── */
-    .svc-grid {
-      position: absolute;
-      top: 998px; left: 44px; right: 44px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px 36px;
-      z-index: 20;
-    }
-    .svc-item {
-      display: flex; align-items: center; gap: 12px;
-    }
-    .svc-circle {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      border: 2px solid #cc1212;
-      background: rgba(200,12,12,0.12);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .svc-circle span {
-      color: #ff2020; font-size: 13px; font-weight: 900; line-height: 1;
-    }
-    .svc-name {
-      font-size: 14.5px; font-weight: 600;
-      color: #c8c8c8;
-      letter-spacing: 0.02em;
+    .offer-off {
+      font-family: 'Oswald', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.32em;
+      margin: 2px 0 8px;
     }
 
-    /* ── TRUST STRIP ── */
-    .trust {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 92px;
-      background: rgba(2,3,7,0.98);
-      border-top: 1px solid rgba(200,12,12,0.22);
-      display: flex; align-items: center;
-      padding: 0 28px;
-      z-index: 30;
-    }
-    .trust-item {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 3px;
-      padding: 0 8px;
-    }
-    .trust-item + .trust-item {
-      border-left: 1px solid #111318;
-    }
-    .trust-ico {
-      font-size: 24px;
-      color: #cc1515;
-      line-height: 1;
-    }
-    .trust-title {
-      font-size: 10px; font-weight: 700;
-      color: #cc1515;
+    .offer-line1 {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
       letter-spacing: 0.14em;
       text-transform: uppercase;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
     }
-    .trust-desc {
-      font-size: 8.5px;
-      color: rgba(255,255,255,0.28);
-      letter-spacing: 0.07em;
+
+    .offer-line2 {
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      text-align: center;
-      line-height: 1.35;
+      margin-top: 4px;
+    }
+
+    /* ── HEADLINE (large, overlaid left) ── */
+    .headline {
+      position: absolute;
+      top: 280px;
+      left: 44px;
+      z-index: 20;
+      max-width: 640px;
+    }
+
+    .hl-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .hl-eyebrow-bar {
+      width: 50px;
+      height: 3px;
+      background: #e01818;
+    }
+
+    .hl-eyebrow-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ff3232;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    .hl1,
+    .hl2,
+    .hl3 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: 0.005em;
+    }
+
+    .hl1 {
+      font-size: 165px;
+      color: #fff;
+      text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55), 0 6px 30px rgba(0, 0, 0, 0.9);
+    }
+
+    .hl2 {
+      font-size: 165px;
+      color: #e01818;
+      text-shadow: 0 0 60px rgba(220, 20, 20, 0.85), 4px 4px 0 rgba(60, 0, 0, 0.55);
+    }
+
+    .hl3 {
+      font-size: 145px;
+      color: #fff;
+      text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55), 0 6px 30px rgba(0, 0, 0, 0.9);
+    }
+
+    /* ── TAGLINE under headline ── */
+    .tagline {
+      position: absolute;
+      top: 850px;
+      left: 44px;
+      z-index: 20;
+      max-width: 720px;
+    }
+
+    .tg-line {
+      font-family: 'Oswald', sans-serif;
+      font-size: 48px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.03em;
+      line-height: 1.12;
+      text-shadow: 2px 3px 0 rgba(0, 0, 0, 0.75), 0 4px 18px rgba(0, 0, 0, 0.9);
+    }
+
+    .tg-line .accent {
+      color: #ff3838;
+    }
+
+    .tg-desc {
+      font-size: 21px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.5;
+      max-width: 620px;
+      margin-top: 16px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+    }
+
+    /* ── CTA BUTTON ── */
+    .cta {
+      position: absolute;
+      top: 1050px;
+      left: 44px;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .cta-btn {
+      background: linear-gradient(135deg, #e01818, #a40e0e);
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 20px 44px;
+      border-radius: 6px;
+      box-shadow: 0 10px 32px rgba(220, 18, 18, 0.6), inset 0 1px 0 rgba(255, 120, 120, 0.3);
+    }
+
+    .cta-handle {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    .cta-handle .small {
+      display: block;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    /* ── LOCATION row ── */
+    .loc {
+      position: absolute;
+      top: 1170px;
+      left: 44px;
+      right: 44px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 20px;
+      background: rgba(4, 5, 8, 0.65);
+      border-left: 4px solid #e01818;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+    }
+
+    .loc-pin {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(220, 18, 18, 0.22);
+      border: 1.5px solid #e01818;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff3838;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .loc-text .l1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+
+    .loc-text .l2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.05em;
+      margin-top: 3px;
+    }
+
+    /* ── SERVICES PANEL (right side) ── */
+    .services {
+      position: absolute;
+      top: 850px;
+      right: 40px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 310px;
+    }
+
+    .services-heading {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #ff3232;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .services-heading::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: #e01818;
+      flex-shrink: 0;
+    }
+
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(4, 5, 8, 0.72);
+      border: 1px solid rgba(220, 18, 18, 0.3);
+      border-left: 3px solid #e01818;
+      border-radius: 6px;
+      padding: 16px 20px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .service-ico {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(220, 18, 18, 0.18);
+      border: 1.5px solid rgba(220, 18, 18, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff3838;
+      font-size: 13px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    .service-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    /* ── TRUST STRIP (bottom) ── */
+    .trust {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 110px;
+      background: linear-gradient(180deg, rgba(2, 3, 7, 0.92), rgba(2, 3, 7, 1));
+      border-top: 2px solid rgba(220, 18, 18, 0.5);
+      display: flex;
+      align-items: center;
+      padding: 0 30px;
+      z-index: 30;
+    }
+
+    .trust-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+    }
+
+    .trust-item+.trust-item {
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .trust-ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(220, 18, 18, 0.2);
+      border: 1.5px solid rgba(220, 18, 18, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff3838;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .trust-text .t1 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .trust-text .t2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 5px;
+      line-height: 1.2;
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Truck photo -->
-  <div class="truck-wrap">
-    <img src="/truck.jpg" alt="truck">
-  </div>
-  <div class="truck-reflect">
-    <img src="/truck.jpg" alt="">
-    <div class="truck-reflect-fade"></div>
-  </div>
-
-  <!-- Overlays -->
+  <!-- Background -->
+  <div class="bg"></div>
   <div class="ov-left"></div>
-  <div class="ov-top"></div>
-  <div class="ov-transition"></div>
-  <div class="ov-bottom-panel"></div>
+  <div class="ov-tb"></div>
+  <div class="ov-glow"></div>
 
   <!-- Brand mark -->
   <div class="brand">
     <div class="brand-ring"><span>CAS</span></div>
     <div class="brand-text">
-      <div class="bname">ChrisAutoShine</div>
+      <div class="bname">Chris Auto Shine</div>
       <div class="bsub">Professional Detailing</div>
     </div>
   </div>
 
   <!-- Offer badge -->
   <div class="offer">
-    <div class="offer-star">&#9733; &#9733; &#9733;</div>
-    <div class="offer-pct">20%</div>
+    <div class="offer-pct">25%</div>
     <div class="offer-off">OFF</div>
-    <div class="offer-line1">YOUR FIRST DETAIL!</div>
-    <div class="offer-line2">Limited time &mdash; Shine more, save more!</div>
+    <div class="offer-line1">Your First Detail</div>
+    <div class="offer-line2">Limited Time</div>
+  </div>
+
+  <!-- Services panel -->
+  <div class="services">
+    <div class="services-heading">Our Services</div>
+    <div class="service-item">
+      <div class="service-ico">01</div>
+      <div class="service-label">Exterior Wash</div>
+    </div>
+    <div class="service-item">
+      <div class="service-ico">02</div>
+      <div class="service-label">Interior Detailing</div>
+    </div>
+    <div class="service-item">
+      <div class="service-ico">03</div>
+      <div class="service-label">Waxing &amp; Polishing</div>
+    </div>
+    <div class="service-item">
+      <div class="service-ico">04</div>
+      <div class="service-label">Paint Correction</div>
+    </div>
   </div>
 
   <!-- Headline -->
   <div class="headline">
+    <div class="hl-eyebrow">
+      <div class="hl-eyebrow-bar"></div>
+      <div class="hl-eyebrow-text">Auto Detailing Specialists</div>
+    </div>
     <div class="hl1">CHRIS</div>
     <div class="hl2">AUTO</div>
     <div class="hl3">SHINE</div>
-    <div class="hl-badge">
-      <span class="hl-badge-star">&#9733;</span>
-      <span class="hl-badge-text">Premium Auto Detailing</span>
-      <span class="hl-badge-star">&#9733;</span>
-    </div>
   </div>
-
-  <!-- Separator -->
-  <div class="sep"></div>
 
   <!-- Tagline -->
   <div class="tagline">
-    <div class="tg-sm">WE BRING OUT</div>
-    <div class="tg-lg-red">THE SHINE</div>
-    <div class="tg-sm">THAT KEEPS YOU</div>
-    <div class="tg-lg-wht">LOOKING GOOD</div>
-    <p class="tg-desc">Specializing in premium auto detailing for vehicles that take pride in looking as good as they perform.</p>
+    <div class="tg-line">We bring out <span class="accent">the shine</span></div>
+    <div class="tg-line">that keeps you moving.</div>
+    <p class="tg-desc">Premium auto &amp; truck detailing for vehicles that take pride in looking as good as they
+      perform.</p>
   </div>
 
-  <!-- Services header -->
-  <div class="svc-header">
-    <div class="svc-label">OUR SERVICES</div>
-    <div class="svc-line"></div>
+  <!-- CTA -->
+  <div class="cta">
+    <div class="cta-btn">Book Now</div>
+    <div class="cta-handle">
+      @chrisautoshine
+      <span class="small">Instagram · Facebook</span>
+    </div>
   </div>
 
-  <!-- Services grid -->
-  <div class="svc-grid">
-    <div class="svc-item">
-      <div class="svc-circle"><span>&#10003;</span></div>
-      <div class="svc-name">Exterior Wash &amp; Wax</div>
-    </div>
-    <div class="svc-item">
-      <div class="svc-circle"><span>&#10003;</span></div>
-      <div class="svc-name">Interior Deep Clean</div>
-    </div>
-    <div class="svc-item">
-      <div class="svc-circle"><span>&#10003;</span></div>
-      <div class="svc-name">Full Detail Package</div>
-    </div>
-    <div class="svc-item">
-      <div class="svc-circle"><span>&#10003;</span></div>
-      <div class="svc-name">Paint Protection</div>
-    </div>
-    <div class="svc-item">
-      <div class="svc-circle"><span>&#10003;</span></div>
-      <div class="svc-name">Paint Correction</div>
-    </div>
-    <div class="svc-item">
-      <div class="svc-circle"><span>&#10003;</span></div>
-      <div class="svc-name">Ceramic Coating</div>
+  <!-- Location -->
+  <div class="loc">
+    <div class="loc-pin">&#9873;</div>
+    <div class="loc-text">
+      <div class="l1">26 Cameron St, Clontarf QLD 4019</div>
+      <div class="l2">info@chrisautoshinedetailing.com.au</div>
     </div>
   </div>
 
   <!-- Trust strip -->
   <div class="trust">
     <div class="trust-item">
-      <div class="trust-ico">&#9632;</div>
-      <div class="trust-title">PROTECTS</div>
-      <div class="trust-desc">Paint &amp; Surface<br>Protection</div>
-    </div>
-    <div class="trust-item">
-      <div class="trust-ico">&#10022;</div>
-      <div class="trust-title">ENHANCES</div>
-      <div class="trust-desc">Gloss &amp;<br>Appearance</div>
-    </div>
-    <div class="trust-item">
-      <div class="trust-ico">&#9711;</div>
-      <div class="trust-title">LONG LASTING</div>
-      <div class="trust-desc">Shine You Can<br>Count On</div>
+      <div class="trust-ico">&#10003;</div>
+      <div class="trust-text">
+        <div class="t1">Fully Insured</div>
+        <div class="t2">Licensed &amp; Certified</div>
+      </div>
     </div>
     <div class="trust-item">
       <div class="trust-ico">&#9733;</div>
-      <div class="trust-title">SATISFACTION</div>
-      <div class="trust-desc">Is Our<br>Guarantee</div>
+      <div class="trust-text">
+        <div class="t1">5-Star Rated</div>
+        <div class="t2">100s of Reviews</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ico">&#9203;</div>
+      <div class="trust-text">
+        <div class="t1">Same-Day</div>
+        <div class="t2">Available 7 Days</div>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ico">&#9873;</div>
+      <div class="trust-text">
+        <div class="t1">Guaranteed</div>
+        <div class="t2">100% Satisfaction</div>
+      </div>
     </div>
   </div>
 
 </body>
+
 </html>

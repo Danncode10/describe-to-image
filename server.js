@@ -64,9 +64,13 @@ app.post('/convert', express.text({ type: 'text/html', limit: '10mb' }), async (
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-    await page.setViewport({ width: 1200, height: 800 });
     await page.setContent(req.body, { waitUntil: 'networkidle0' });
-    const png = await page.screenshot({ type: 'png', fullPage: true });
+    const dims = await page.evaluate(() => {
+      const s = getComputedStyle(document.body);
+      return { w: parseInt(s.width), h: parseInt(s.height) };
+    });
+    await page.setViewport({ width: dims.w, height: dims.h, deviceScaleFactor: 2 });
+    const png = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: dims.w, height: dims.h } });
     await browser.close();
 
     res.setHeader('Content-Type', 'image/png');
@@ -90,9 +94,13 @@ app.get('/convert/:folder/:name', async (req, res) => {
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-    await page.setViewport({ width: 1200, height: 800 });
     await page.goto(`http://localhost:${PORT}/${req.params.folder}/${req.params.name}`, { waitUntil: 'networkidle0' });
-    const png = await page.screenshot({ type: 'png', fullPage: true });
+    const dims = await page.evaluate(() => {
+      const s = getComputedStyle(document.body);
+      return { w: parseInt(s.width), h: parseInt(s.height) };
+    });
+    await page.setViewport({ width: dims.w, height: dims.h, deviceScaleFactor: 2 });
+    const png = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: dims.w, height: dims.h } });
     await browser.close();
 
     const pngName = req.params.name.replace('.html', '.png');
