@@ -1,14 +1,20 @@
 # Describe to Image
 
-Convert HTML descriptions into beautiful PNG images automatically. Write HTML, see preview instantly, and download as PNG.
+Convert descriptions and style references into beautiful PNG images automatically. Describe what you want, get HTML rendered live, and download as PNG.
 
 ## Features
 
-✅ **Live Preview** - See your HTML rendered in real-time  
-✅ **HTML to PNG** - Convert any HTML to downloadable PNG images  
-✅ **Template Library** - Pre-built templates for common designs  
-✅ **Easy to Use** - Simple web interface, no learning curve  
-✅ **Customizable** - Create any HTML design you want  
+[CORE]
+- Live HTML preview in real-time
+- Convert HTML to PNG images
+- Template library with pre-built designs
+- Simple web interface
+
+[POWERED BY]
+- Image reference analysis (describe a style, I match it)
+- Text description to HTML conversion
+- Puppeteer rendering engine
+- One-click PNG download
 
 ## Quick Start
 
@@ -25,23 +31,41 @@ npm start
 
 The app will be available at `http://localhost:3000`
 
-### 3. Navigate to Home
-Open your browser and go to:
+### 3. Open Web Interface
+Visit: http://localhost:3000
+
+## Commands
+
+### /describe-image
+
+Generate images from descriptions or style references.
+
+Usage:
 ```
-http://localhost:3000/home
+/describe-image Create a modern gradient card with white text and rounded corners
+
+/describe-image Make something in the style of [image], but with this text: ...
+
+/describe-image Show me a social media card like Instagram Stories design
 ```
 
-Or visit the main interface:
-```
-http://localhost:3000
-```
+I will:
+1. Analyze your description or image reference
+2. Generate matching HTML
+3. Display in the preview
+4. Ready to download as PNG
 
-## How to Use
+Examples:
+- "Create a quote card in minimalist black and white"
+- "Make a product card like Apple's design aesthetic"
+- "Generate a social post style card with gradient background"
 
-1. **Browse Templates**: Load any pre-built template from the left panel
-2. **Edit HTML**: Modify the HTML code in the editor
-3. **Preview**: Click "Preview" to see your design
-4. **Download**: Click "Download PNG" to save the image
+## How to Use the Web Interface
+
+1. **Load Templates** - Click any template button on the left to load pre-built designs
+2. **Edit HTML** - Modify code in the editor
+3. **Preview** - Click "Preview" to see live rendering
+4. **Download** - Click "Download PNG" to save the image
 
 ## Project Structure
 
@@ -58,6 +82,30 @@ describe-to-image/
 ├── package.json        # Dependencies
 ├── describe.md         # Description & examples
 └── README.md           # This file
+```
+
+## Workflow: From Reference to Image
+
+### Option 1: Describe What You Want
+```
+User: "Create a card with blue gradient, white text, modern feel"
+Claude: Generates HTML matching description
+Result: Preview in web UI, download as PNG
+```
+
+### Option 2: Show a Reference Style
+```
+User: "See this image [reference], make something similar"
+Claude: Analyzes image style (colors, layout, typography)
+Claude: Generates HTML in that style
+Result: Styled image ready to customize
+```
+
+### Option 3: Combine Both
+```
+User: "Style like [image], but with this content..."
+Claude: Merges reference style with your content
+Result: Customized styled image
 ```
 
 ## Creating New Templates
@@ -87,6 +135,14 @@ Example structure:
 ```
 
 **Important**: Set explicit `width` and `height` on the body for consistent PNG export.
+
+## Design Tips
+
+- Be specific with color names or hex codes
+- Mention typography preferences (serif, sans-serif, modern, elegant)
+- Specify layout (centered, grid, side-by-side)
+- Reference real designs from brands you like
+- For best results, include target dimensions
 
 ## API Endpoints
 
