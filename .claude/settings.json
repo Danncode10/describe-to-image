@@ -1,10 +1,26 @@
 {
-  "skills": ["verify"],
-  "defaultCommand": "describe-image",
-  "context": {
-    "project": "Describe to Image - HTML to PNG converter",
-    "mainFiles": ["server.js", "public/index.html", "describe.md"],
-    "port": 3000,
-    "endpoint": "http://localhost:3000"
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q '\"templates/'; then echo '[describe-to-image] Template saved. Reload http://localhost:3000 to see it in the list.'; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(mkdir:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)"
+    ]
   }
 }

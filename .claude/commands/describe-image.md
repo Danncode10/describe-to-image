@@ -1,58 +1,77 @@
 ---
-description: Generate HTML and PNG images from descriptions or style references
+description: Generate HTML from a text description or image reference, ready to preview and export as PNG
 ---
 
-Create beautiful images by describing what you want or showing a reference style.
+Generate a styled HTML template based on the user's description or image reference.
 
-## Usage
+## Input Types Supported
 
-### From Text Description
-"Create a modern card with blue gradient background, title in white, minimalist design"
+### 1. Text Description
+User says: "Create a [style] card with [content] and [design preferences]"
 
-I will:
-1. Analyze your description
-2. Generate matching HTML
-3. Display preview in the web UI
-4. Ready to download as PNG
+Steps:
+1. Parse the description for: content, colors, typography, layout, mood
+2. Generate complete self-contained HTML (no external CSS files)
+3. Set body width/height explicitly for PNG export
+4. Output the full HTML block
+5. State design decisions made (colors, fonts, spacing)
+6. Remind user to preview at http://localhost:3000
 
-### From Image Reference
-"See this image [path/url], make something in this style with text about..."
+### 2. Image Reference
+User provides an image path or URL alongside their request.
 
-I will:
-1. Analyze the reference image style (colors, layout, typography)
-2. Extract key design elements
-3. Generate HTML matching that style
-4. Adapt your content into the template
+Steps:
+1. Analyze the image using vision:
+   - Extract dominant color palette (list hex values)
+   - Identify layout structure (centered, grid, side-by-side, full-bleed)
+   - Note typography weight and style (bold headline, light body, serif vs sans)
+   - Assess spacing and density (airy/minimal vs compact/dense)
+   - Note any distinctive visual elements (borders, shadows, shapes, icons)
+2. Reconstruct the aesthetic in HTML matching those extracted styles
+3. Adapt the user's content into that visual style
+4. Output the full HTML
 
-### From Combination
-Provide both reference image AND description:
-"Style it like [image], but with this text: ..."
+### 3. Combined (Reference + Custom Content)
+User provides image + specific content to place in that style.
 
-## Output
+Steps:
+1. Analyze reference image style (as above)
+2. Use extracted style as the visual framework
+3. Place user's specific content into that framework
+4. Output the styled HTML
 
-Generated HTML code that you can:
-- Preview live in http://localhost:3000
-- Edit and customize
-- Download as PNG using the Download button
+---
 
-## Working with Templates
+## HTML Output Requirements
 
-Access existing templates:
-- social-card.html - Modern gradient cards
-- quote-card.html - Elegant typography
-- product-card.html - Product showcase
+Every generated HTML must:
+- Be fully self-contained (single file, no external CSS)
+- Have explicit body dimensions: `width: 1200px; height: 800px` (adjustable)
+- Use display:flex or grid for layout centering
+- Embed any needed font via Google Fonts link tag
+- Be visually polished — use shadows, gradients, or typography hierarchy
 
-## Tips
+---
 
-1. Be specific with colors if you want exact tones
-2. Mention fonts or typography style
-3. Specify layout preferences (centered, left-aligned, etc)
-4. Reference similar designs from brands you like
-5. For consistent results, mention target dimensions
+## After Generating HTML
 
-## Example Commands
+Always end with:
+1. Copy the HTML into the editor at http://localhost:3000
+2. Click "Preview" to see the live render
+3. Adjust if needed
+4. Click "Download PNG" to export
 
-"Create a social media card like Instagram Stories style"
-"Make a quote card in the style of Spotify design"
-"Design a product card similar to Apple's minimalist aesthetic"
-"Generate an email header card with modern corporate styling"
+---
+
+## Common Styles Reference
+
+Invoke by name if user mentions:
+
+- "Instagram Stories" → 9:16 portrait, bold full-bleed gradient, centered sans-serif headline
+- "Apple minimal" → White background, SF Pro-style font, lots of negative space, single focused element
+- "Spotify" → Dark (#191414) background, green (#1DB954) accent, bold white headline
+- "LinkedIn" → Professional blue (#0077B5), clean sans-serif, corporate white card
+- "Twitter/X" → Dark mode (#15202B), white text, rounded card shape
+- "Notion" → Off-white (#FFFEF9), serif heading, clean editorial layout
+- "Canva" → Colorful, template-y, bright palette, multiple text layers
+- "Awwwards" → Bold experimental typography, asymmetric layout, high contrast
