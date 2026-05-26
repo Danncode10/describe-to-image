@@ -123,25 +123,31 @@ Home route (`/home`) returns a JSON list of all templates in `./templates/`.
 
 ---
 
-## Skills Setup (First Time)
+## Skills Installed
 
-Run these once from the project root to install recommended skills:
+Already installed in `.claude/skills/`. Run `npx skills list` to verify.
+
+| Skill | Source | What it does |
+|---|---|---|
+| `web-design-guidelines` | vercel-labs/agent-skills | Audits HTML against 100+ accessibility, UX, and performance rules |
+| `webapp-testing` | anthropics/skills | Live browser testing via Playwright — tests localhost:3000 |
+| `html-anything` | clockless-org/html-anything | HTML generation assistant for cards, pages, and layouts |
+| `skill-creator` | anthropics/skills | Build new custom skills from inside this project |
+| `senior-frontend` | alirezarezvani/claude-skills | Senior-level frontend code quality and patterns |
+| `ui-design-system` | alirezarezvani/claude-skills | Design system thinking — spacing, tokens, consistency |
+| `landing-page-generator` | alirezarezvani/claude-skills | Generate landing-style layouts from prompts |
+| `full-page-screenshot` | alirezarezvani/claude-skills | Full-page screenshot workflows (complements Puppeteer export) |
+
+To reinstall from scratch:
 
 ```bash
-# Web design quality guidelines (Vercel official)
 npx skills add vercel-labs/agent-skills --skill web-design-guidelines --agent claude-code
-
-# Live browser testing via Playwright
-npx skills add vercel-labs/agent-skills --skill webapp-testing --agent claude-code
-
-# HTML generation helper
-npx skills add alirezarezvani/claude-skills --skill html-anything --agent claude-code
-
-# Build custom skills
-npx skills add anthropics/skills --skill skill-creator --agent claude-code
+npx skills add anthropics/skills --skill webapp-testing --skill skill-creator --agent claude-code
+npx skills add clockless-org/html-anything --skill html-anything --agent claude-code
+npx skills add alirezarezvani/claude-skills --skill senior-frontend --skill ui-design-system --skill landing-page-generator --skill full-page-screenshot --agent claude-code
 ```
 
-After installing, verify with:
+Verify:
 ```bash
 npx skills list
 ```
@@ -166,13 +172,22 @@ describe-to-image/
 └── .claude/
     ├── CLAUDE.md         # Project instructions for Claude
     ├── settings.json     # Hooks and permissions
-    └── commands/
-        ├── describe-image.md   # /describe-image
-        ├── analyze-style.md    # /analyze-style
-        ├── add-template.md     # /add-template
-        ├── list-templates.md   # /list-templates
-        ├── export-png.md       # /export-png
-        └── design-audit.md     # /design-audit
+    ├── commands/
+    │   ├── describe-image.md   # /describe-image
+    │   ├── analyze-style.md    # /analyze-style
+    │   ├── add-template.md     # /add-template
+    │   ├── list-templates.md   # /list-templates
+    │   ├── export-png.md       # /export-png
+    │   └── design-audit.md     # /design-audit
+    └── skills/
+        ├── web-design-guidelines/
+        ├── webapp-testing/
+        ├── html-anything/
+        ├── skill-creator/
+        ├── senior-frontend/
+        ├── ui-design-system/
+        ├── landing-page-generator/
+        └── full-page-screenshot/
 ```
 
 ---
