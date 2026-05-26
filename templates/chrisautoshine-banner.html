@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1080px;
+      height: 1350px;
+      font-family: 'Inter', sans-serif;
+      background: #070809;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── TRUCK: right side, full height ── */
+    .truck-wrap {
+      position: absolute;
+      top: 0;
+      right: -80px;
+      width: 820px;
+      height: 980px;
+    }
+    .truck-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 30% 10%;
+      filter: contrast(1.1) saturate(1.15) brightness(0.78);
+    }
+
+    /* Truck reflection */
+    .truck-reflect {
+      position: absolute;
+      top: 820px;
+      right: -80px;
+      width: 820px;
+      height: 180px;
+    }
+    .truck-reflect img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 30% bottom;
+      transform: scaleY(-1);
+      filter: brightness(0.25) blur(3px) saturate(0.8);
+      opacity: 0.5;
+    }
+    .truck-reflect-fade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, #070809 0%, transparent 100%);
+    }
+
+    /* ── OVERLAYS ── */
+    /* Left content area gradient */
+    .ov-left {
+      position: absolute;
+      top: 0; left: 0;
+      width: 620px;
+      height: 1000px;
+      background: linear-gradient(90deg,
+        #070809 0%,
+        #070809 38%,
+        rgba(7,8,9,0.92) 55%,
+        rgba(7,8,9,0.55) 74%,
+        transparent 100%
+      );
+    }
+
+    /* Top dark fade */
+    .ov-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 140px;
+      background: linear-gradient(180deg, rgba(5,6,10,0.72) 0%, transparent 100%);
+    }
+
+    /* Bottom dark panel */
+    .ov-bottom-panel {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 420px;
+      background: #04050a;
+    }
+
+    /* Transition from truck to panel */
+    .ov-transition {
+      position: absolute;
+      top: 840px; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(0deg, #04050a 0%, transparent 100%);
+    }
+
+    /* ── BRAND MARK ── */
+    .brand {
+      position: absolute;
+      top: 36px; left: 44px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+    .brand-ring {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      border: 2.5px solid #d41414;
+      background: rgba(180,15,15,0.14);
+      box-shadow: 0 0 22px rgba(200,15,15,0.45);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand-ring span {
+      font-family: 'Oswald', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: #ff2525;
+      letter-spacing: 0.05em;
+    }
+    .brand-text .bname {
+      font-size: 14px; font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+    .brand-text .bsub {
+      font-size: 9px; color: rgba(255,255,255,0.38);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    /* ── OFFER BADGE (top right) ── */
+    .offer {
+      position: absolute;
+      top: 28px; right: 36px;
+      z-index: 30;
+      text-align: center;
+      background: rgba(4,5,10,0.88);
+      border: 1.5px solid rgba(215,20,20,0.65);
+      border-radius: 6px;
+      padding: 14px 22px 13px;
+      min-width: 190px;
+      box-shadow: 0 0 35px rgba(200,12,12,0.32), inset 0 1px 0 rgba(255,70,70,0.1);
+    }
+    .offer-star {
+      color: #dd1515;
+      font-size: 13px;
+      letter-spacing: 8px;
+      margin-bottom: 2px;
+    }
+    .offer-pct {
+      font-family: 'Oswald', sans-serif;
+      font-size: 72px; font-weight: 700;
+      line-height: 1;
+      color: #ff1e1e;
+      text-shadow: 0 0 35px rgba(255,20,20,0.55);
+    }
+    .offer-off {
+      font-family: 'Oswald', sans-serif;
+      font-size: 32px; font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.22em;
+      margin-top: -6px;
+    }
+    .offer-line1 {
+      font-size: 11.5px; font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .offer-line2 {
+      font-size: 8px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ── HEADLINE ── */
+    .headline {
+      position: absolute;
+      top: 155px; left: 44px;
+      z-index: 20;
+    }
+    .hl1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 128px; font-weight: 700;
+      color: #fff;
+      line-height: 0.88;
+      letter-spacing: 0.01em;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.6), 0 4px 24px rgba(0,0,0,0.8);
+    }
+    .hl2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 128px; font-weight: 700;
+      color: #e01414;
+      line-height: 0.88;
+      letter-spacing: 0.01em;
+      text-shadow: 0 0 50px rgba(220,15,15,0.7), 3px 3px 0 rgba(80,0,0,0.5);
+    }
+    .hl3 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 90px; font-weight: 700;
+      color: #fff;
+      line-height: 0.92;
+      letter-spacing: 0.04em;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.8);
+    }
+    .hl-badge {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 14px;
+    }
+    .hl-badge-star { color: #cc1515; font-size: 12px; }
+    .hl-badge-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px; font-weight: 500;
+      color: #bbb;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ── SEPARATOR ── */
+    .sep {
+      position: absolute;
+      top: 568px; left: 44px;
+      width: 290px; height: 2px;
+      background: linear-gradient(90deg, #cc1111 0%, rgba(180,15,15,0.08) 100%);
+      z-index: 20;
+    }
+
+    /* ── TAGLINE ── */
+    .tagline {
+      position: absolute;
+      top: 588px; left: 44px;
+      z-index: 20;
+    }
+    .tg-sm {
+      font-size: 12.5px; font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+    .tg-lg-red {
+      font-family: 'Oswald', sans-serif;
+      font-size: 48px; font-weight: 700;
+      color: #e01414;
+      letter-spacing: 0.02em; line-height: 1;
+      text-shadow: 0 0 30px rgba(220,15,15,0.5);
+    }
+    .tg-lg-wht {
+      font-family: 'Oswald', sans-serif;
+      font-size: 40px; font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.03em; line-height: 1;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    }
+    .tg-desc {
+      font-size: 11px;
+      color: rgba(255,255,255,0.38);
+      line-height: 1.65;
+      max-width: 310px;
+      margin-top: 10px;
+    }
+
+    /* ── SERVICES HEADER ── */
+    .svc-header {
+      position: absolute;
+      top: 940px; left: 0;
+      z-index: 30;
+      display: flex; align-items: center;
+    }
+    .svc-label {
+      background: linear-gradient(90deg, #c41010, #991010);
+      padding: 9px 44px 9px 44px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px; font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
+    }
+    .svc-line {
+      flex: 1; height: 2px;
+      background: linear-gradient(90deg, rgba(180,12,12,0.55), transparent);
+    }
+
+    /* ── SERVICES GRID ── */
+    .svc-grid {
+      position: absolute;
+      top: 998px; left: 44px; right: 44px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 36px;
+      z-index: 20;
+    }
+    .svc-item {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .svc-circle {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid #cc1212;
+      background: rgba(200,12,12,0.12);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .svc-circle span {
+      color: #ff2020; font-size: 13px; font-weight: 900; line-height: 1;
+    }
+    .svc-name {
+      font-size: 14.5px; font-weight: 600;
+      color: #c8c8c8;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── TRUST STRIP ── */
+    .trust {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 92px;
+      background: rgba(2,3,7,0.98);
+      border-top: 1px solid rgba(200,12,12,0.22);
+      display: flex; align-items: center;
+      padding: 0 28px;
+      z-index: 30;
+    }
+    .trust-item {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 3px;
+      padding: 0 8px;
+    }
+    .trust-item + .trust-item {
+      border-left: 1px solid #111318;
+    }
+    .trust-ico {
+      font-size: 24px;
+      color: #cc1515;
+      line-height: 1;
+    }
+    .trust-title {
+      font-size: 10px; font-weight: 700;
+      color: #cc1515;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .trust-desc {
+      font-size: 8.5px;
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Truck photo -->
+  <div class="truck-wrap">
+    <img src="/truck.jpg" alt="truck">
+  </div>
+  <div class="truck-reflect">
+    <img src="/truck.jpg" alt="">
+    <div class="truck-reflect-fade"></div>
+  </div>
+
+  <!-- Overlays -->
+  <div class="ov-left"></div>
+  <div class="ov-top"></div>
+  <div class="ov-transition"></div>
+  <div class="ov-bottom-panel"></div>
+
+  <!-- Brand mark -->
+  <div class="brand">
+    <div class="brand-ring"><span>CAS</span></div>
+    <div class="brand-text">
+      <div class="bname">ChrisAutoShine</div>
+      <div class="bsub">Professional Detailing</div>
+    </div>
+  </div>
+
+  <!-- Offer badge -->
+  <div class="offer">
+    <div class="offer-star">&#9733; &#9733; &#9733;</div>
+    <div class="offer-pct">20%</div>
+    <div class="offer-off">OFF</div>
+    <div class="offer-line1">YOUR FIRST DETAIL!</div>
+    <div class="offer-line2">Limited time &mdash; Shine more, save more!</div>
+  </div>
+
+  <!-- Headline -->
+  <div class="headline">
+    <div class="hl1">CHRIS</div>
+    <div class="hl2">AUTO</div>
+    <div class="hl3">SHINE</div>
+    <div class="hl-badge">
+      <span class="hl-badge-star">&#9733;</span>
+      <span class="hl-badge-text">Premium Auto Detailing</span>
+      <span class="hl-badge-star">&#9733;</span>
+    </div>
+  </div>
+
+  <!-- Separator -->
+  <div class="sep"></div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    <div class="tg-sm">WE BRING OUT</div>
+    <div class="tg-lg-red">THE SHINE</div>
+    <div class="tg-sm">THAT KEEPS YOU</div>
+    <div class="tg-lg-wht">LOOKING GOOD</div>
+    <p class="tg-desc">Specializing in premium auto detailing for vehicles that take pride in looking as good as they perform.</p>
+  </div>
+
+  <!-- Services header -->
+  <div class="svc-header">
+    <div class="svc-label">OUR SERVICES</div>
+    <div class="svc-line"></div>
+  </div>
+
+  <!-- Services grid -->
+  <div class="svc-grid">
+    <div class="svc-item">
+      <div class="svc-circle"><span>&#10003;</span></div>
+      <div class="svc-name">Exterior Wash &amp; Wax</div>
+    </div>
+    <div class="svc-item">
+      <div class="svc-circle"><span>&#10003;</span></div>
+      <div class="svc-name">Interior Deep Clean</div>
+    </div>
+    <div class="svc-item">
+      <div class="svc-circle"><span>&#10003;</span></div>
+      <div class="svc-name">Full Detail Package</div>
+    </div>
+    <div class="svc-item">
+      <div class="svc-circle"><span>&#10003;</span></div>
+      <div class="svc-name">Paint Protection</div>
+    </div>
+    <div class="svc-item">
+      <div class="svc-circle"><span>&#10003;</span></div>
+      <div class="svc-name">Paint Correction</div>
+    </div>
+    <div class="svc-item">
+      <div class="svc-circle"><span>&#10003;</span></div>
+      <div class="svc-name">Ceramic Coating</div>
+    </div>
+  </div>
+
+  <!-- Trust strip -->
+  <div class="trust">
+    <div class="trust-item">
+      <div class="trust-ico">&#9632;</div>
+      <div class="trust-title">PROTECTS</div>
+      <div class="trust-desc">Paint &amp; Surface<br>Protection</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ico">&#10022;</div>
+      <div class="trust-title">ENHANCES</div>
+      <div class="trust-desc">Gloss &amp;<br>Appearance</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ico">&#9711;</div>
+      <div class="trust-title">LONG LASTING</div>
+      <div class="trust-desc">Shine You Can<br>Count On</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ico">&#9733;</div>
+      <div class="trust-title">SATISFACTION</div>
+      <div class="trust-desc">Is Our<br>Guarantee</div>
+    </div>
+  </div>
+
+</body>
+</html>
