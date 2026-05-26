@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Card</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 1200px;
+      height: 800px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+      font-family: 'Georgia', serif;
+    }
+    .card {
+      width: 700px;
+      padding: 60px;
+      background: #FFF8DC;
+      border-left: 8px solid #FFD700;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    .quote {
+      font-size: 2em;
+      color: #3E2723;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      font-style: italic;
+    }
+    .quote::before {
+      content: '"';
+      font-size: 3em;
+      color: #FFD700;
+      line-height: 0;
+      vertical-align: -0.45em;
+      margin-right: 0.1em;
+    }
+    .quote::after {
+      content: '"';
+      font-size: 3em;
+      color: #FFD700;
+      line-height: 0;
+      vertical-align: -0.45em;
+      margin-left: 0.1em;
+    }
+    .author {
+      text-align: right;
+      font-size: 1.2em;
+      color: #666;
+      margin-top: 20px;
+      font-style: normal;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="quote">The best time to plant a tree was 20 years ago. The second best time is now.</div>
+    <div class="author">— Chinese Proverb</div>
+  </div>
+</body>
+</html>

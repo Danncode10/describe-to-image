@@ -1,0 +1,14 @@
+{
+  "name": "describe-to-image",
+  "version": "1.0.0",
+  "description": "Convert HTML descriptions to PNG images",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "puppeteer": "^25.0.4"
+  }
+}
